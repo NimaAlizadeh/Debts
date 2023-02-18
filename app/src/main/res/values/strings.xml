@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Debts</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="today">بدهی های امروز</string>
+    <string name="all">همه بدهی ها</string>
+    <string name="search">جستجو</string>
+    <string name="empty">لیست خالی</string>
+    <string name="addDebt">افزودن بدهی</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="todo">TODO</string>
+</resources>

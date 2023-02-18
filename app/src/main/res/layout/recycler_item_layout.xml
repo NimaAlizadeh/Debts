@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@drawable/recycler_item_white_shape"
+    android:id="@+id/recycler_whole_layout"
+    android:layout_marginStart="4dp"
+    android:layout_marginEnd="4dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    android:elevation="4dp"
+    android:paddingTop="10dp"
+    android:paddingEnd="5dp"
+    android:paddingStart="5dp"
+    android:paddingBottom="10dp"
+    android:focusable="true"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:layoutDirection="ltr">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="5dp"
+        android:id="@+id/recycler_remainingDate"
+        android:text="1/23/2345"/>
+
+    <TextView
+        android:textDirection="rtl"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/recycler_remainingDate"
+        android:id="@+id/recycler_fullName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/_10mdp"
+        android:paddingEnd="@dimen/_10mdp"
+        android:text="نیما علیزاده"
+        android:textSize="@dimen/_14font_mdp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:fontFamily="@font/sh"
+        android:layout_marginStart="5dp"/>
+
+    <ImageView
+        android:id="@+id/recycler_more_menu"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/ic_baseline_more_vert_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="10dp"
+        android:focusable="true"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"/>
+
+    <TextView
+        android:id="@+id/recycler_remaining_debt_text"
+        android:layout_marginTop="5dp"
+        app:layout_constraintEnd_toStartOf="@id/recycler_more_menu"
+        app:layout_constraintTop_toBottomOf="@id/recycler_fullName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/_5mdp"
+        android:paddingEnd="10dp"
+        android:text="بدهی باقی مانده (ریال):"
+        android:textSize="@dimen/_14font_mdp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/sh"/>
+
+    <TextView
+        android:id="@+id/recycler_remaining_debt"
+        app:layout_constraintTop_toTopOf="@id/recycler_remaining_debt_text"
+        app:layout_constraintEnd_toStartOf="@id/recycler_remaining_debt_text"
+        app:layout_constraintBottom_toBottomOf="@id/recycler_remaining_debt_text"
+        android:textColor="@color/orange"
+        android:text="12000000"
+        android:textStyle="bold"
+        android:paddingTop="3dp"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:textSize="@dimen/_15font_mdp"/>
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:id="@+id/recycler_status_text"
+        android:paddingEnd="10dp"
+        android:fontFamily="@font/sh"
+        android:textColor="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/recycler_remaining_debt_text"
+        app:layout_constraintEnd_toStartOf="@id/recycler_more_menu"
+        android:textDirection="rtl"
+        android:text="وضعیت بدهی : "
+        android:textSize="@dimen/_14font_mdp"/>
+
+    <TextView
+        android:id="@+id/recycler_status"
+        android:fontFamily="@font/sh"
+        android:textColor="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/recycler_status_text"
+        app:layout_constraintEnd_toStartOf="@id/recycler_status_text"
+        android:textDirection="rtl"
+        android:text="عبور از موعد"
+        android:textSize="@dimen/_14font_mdp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

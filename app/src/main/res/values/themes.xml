@@ -1,0 +1,43 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.Debts" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/orange</item>
+        <item name="colorPrimaryVariant">@color/black</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/orange</item>
+        <item name="colorSecondaryVariant">@color/orange</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+        <item name="bottomSheetDialogTheme">@style/CustomBottomSheetThemeOverlay</item>
+    </style>
+
+        <style name="CustomBottomSheetThemeOverlay" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
+            <item name="bottomSheetStyle">@style/CustomBottomSheetMaterialComponent</item>
+        </style>
+
+        <style name="CustomBottomSheetMaterialComponent" parent="Widget.MaterialComponents.BottomSheet">
+            <item name="shapeAppearanceOverlay">@style/CustomBottomSheet</item>
+        </style>
+
+        <style name="CustomBottomSheet" parent="">
+            <item name="cornerFamily">rounded</item>
+            <item name="cornerSizeTopRight">100dp</item>
+            <item name="cornerSizeTopLeft">100dp</item>
+        </style>
+
+    <style name="newlala" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:background">@color/white</item>
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerRadius">10dp</item>
+    </style>
+
+
+    <style name="inputTextStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxBackgroundColor">@color/background_color</item>
+        <item name="startIconTint">@color/orange</item>
+    </style>
+</resources>

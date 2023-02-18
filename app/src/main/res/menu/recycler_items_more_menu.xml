@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="حذف" android:id="@+id/recycler_menu_detail_delete"
+        android:icon="@drawable/ic_baseline_delete_24"/>
+
+    <item android:title="ویرایش" android:id="@+id/recycler_menu_detail_edit"
+        android:icon="@drawable/ic_baseline_edit_24"/>
+
+    <item android:title="اشتراک گذاری" android:id="@+id/recycler_menu_detail_share"
+        android:icon="@drawable/ic_baseline_share_24"/>
+</menu>

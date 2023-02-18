@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingEnd="20dp"
+    android:paddingStart="20dp"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:layoutDirection="ltr">
+
+    <TextView
+        android:id="@+id/recycler_payment_item_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="1401/11/25"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_15font_mdp"
+        android:fontFamily="@font/sh"/>
+
+    <TextView
+        android:layout_marginStart="2dp"
+        android:fontFamily="@font/sh"
+        android:id="@+id/recycler_payment_item_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/rial_text"
+        android:text="85,000,000"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_15font_mdp"/>
+
+    <TextView
+        android:layout_marginTop="-3dp"
+        android:id="@+id/rial_text"
+        android:fontFamily="@font/sh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text=" ریال"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_15font_mdp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

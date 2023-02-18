@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.details.DetailsFragment"
+    android:background="@color/background_color"
+    android:layoutDirection="ltr">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        app:menu="@menu/recycler_items_more_menu"
+        android:id="@+id/details_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        android:elevation="5dp"
+        app:navigationIconTint="@color/black"
+        app:title="جزئیات"
+        app:titleCentered="true"
+        app:titleTextColor="@color/black"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:navigationIcon="@drawable/ic_baseline_arrow_back_24"/>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/details_toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.cardview.widget.CardView
+            android:background="@color/white"
+            app:cardCornerRadius="@dimen/_10mdp"
+            android:id="@+id/cardView"
+            android:layout_margin="@dimen/_10mdp"
+            app:cardElevation="@dimen/_5mdp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/details_toolbar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+
+            <LinearLayout
+                android:paddingTop="10dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:id="@+id/details_fullName_text"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:textStyle="bold"
+                        android:textColor="@color/orange"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="مشتری : "
+                        android:fontFamily="@font/sh"
+                        android:textSize="@dimen/_11font_mdp"/>
+
+                    <TextView
+                        app:layout_constraintTop_toTopOf="@id/details_fullName_text"
+                        app:layout_constraintBottom_toBottomOf="@id/details_fullName_text"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:id="@+id/details_fullName"
+                        android:textDirection="rtl"
+                        android:textColor="@color/black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="نیما علیزاده"
+                        android:fontFamily="@font/sh"
+                        android:textSize="@dimen/_15font_mdp"
+                        android:paddingEnd="110dp"
+                        android:paddingStart="10dp"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <View
+                    android:background="@drawable/separator_shape"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layoutDirection="rtl"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:id="@+id/details_phoneNumber_text"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:textStyle="bold"
+                        android:textColor="@color/orange"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="شماره تلفن : "
+                        android:fontFamily="@font/sh"
+                        android:textSize="@dimen/_11font_mdp"/>
+
+                    <TextView
+                        app:layout_constraintTop_toTopOf="@+id/details_phoneNumber_text"
+                        app:layout_constraintBottom_toBottomOf="@+id/details_phoneNumber_text"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:drawableEnd="@drawable/ic_baseline_phone_24"
+                        android:drawablePadding="10dp"
+                        android:id="@+id/details_phoneNumber"
+                        android:textDirection="rtl"
+                        android:textColor="@color/black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="09392639356"
+                        android:fontFamily="@font/sh"
+                        android:textSize="@dimen/_15font_mdp"
+                        android:paddingEnd="10dp"
+                        android:paddingStart="110dp"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <View
+                    android:background="@drawable/separator_shape"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp">
+
+                    <TextView
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:id="@+id/details_goldPrice_text"
+                        android:textStyle="bold"
+                        android:textColor="@color/orange"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="فی روز (ریال) : "
+                        android:fontFamily="@font/sh"
+                        android:textSize="@dimen/_11font_mdp"/>
+
+                    <TextView
+                        app:layout_constraintTop_toTopOf="@+id/details_goldPrice_text"
+                        app:layout_constraintBottom_toBottomOf="@+id/details_goldPrice_text"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:id="@+id/details_goldPrice"
+                        android:textDirection="rtl"
+                        android:textColor="@color/black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1241313"
+                        android:fontFamily="@font/sh"
+                        android:textSize="@dimen/_15font_mdp"
+                        android:paddingEnd="110dp"
+                        android:paddingStart="10dp"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <View
+                    android:background="@drawable/separator_shape"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:id="@+id/details_remainingDebt_text"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:textStyle="bold"
+                        android:textColor="@color/orange"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="مانده بدهی (ریال) : "
+                        android:fontFamily="@font/sh"
+                        android:textSize="@dimen/_11font_mdp"/>
+
+                    <TextView
+                        android:layout_marginEnd="10dp"
+                        app:layout_constraintTop_toTopOf="@id/details_remainingDebt_text"
+                        app:layout_constraintBottom_toBottomOf="@id/details_remainingDebt_text"
+                        app:layout_constraintEnd_toStartOf="@id/details_remainingDebt_text"
+                        android:id="@+id/details_remainingDebt"
+                        android:textDirection="rtl"
+                        android:textColor="@color/black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="123456789"
+                        android:fontFamily="@font/sh"
+                        android:textSize="@dimen/_15font_mdp"
+                        android:paddingStart="10dp"/>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@id/details_remainingDebt_text"
+                        android:id="@+id/details_payment_date_layout"
+                        android:layout_margin="10dp"
+                        android:hint="تاریخ پرداخت"
+                        app:endIconMode="clear_text"
+                        app:startIconDrawable="@drawable/ic_baseline_date_range_24"
+                        app:layout_constraintBottom_toTopOf="@id/details_payment_amount_layout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:lines="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:inputType="numberSigned"
+                            android:id="@+id/details_payment_date_edt"
+                            android:textDirection="rtl"
+                            android:clickable="false"
+                            android:focusable="false"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@id/details_payment_date_layout"
+                        android:id="@+id/details_payment_amount_layout"
+                        android:layout_margin="10dp"
+                        android:hint="مبلغ پرداختی (ریال) "
+                        app:endIconMode="clear_text"
+                        app:startIconDrawable="@drawable/ic_baseline_monetization_on_24"
+                        app:layout_constraintBottom_toTopOf="@id/details_payment_button">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:lines="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:inputType="numberSigned"
+                            android:id="@+id/details_payment_amount_edt"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        app:cornerRadius="4dp"
+                        android:layout_margin="20dp"
+                        android:id="@+id/details_payment_button"
+                        android:elevation="5dp"
+                        android:background="@drawable/button_shape"
+                        android:textColor="@color/white"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="ثبت پرداخت"
+                        android:textSize="@dimen/_14font_mdp"
+                        android:fontFamily="@font/sh"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toBottomOf="@id/details_payment_amount_layout"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginBottom="20dp"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/details_payment_recycler"
+                        app:layout_constraintTop_toBottomOf="@id/details_payment_button"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:layout_marginTop="10dp"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <View
+                    android:background="@drawable/separator_shape"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp">
+
+                    <TextView
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:id="@+id/details_remainingDebtDate_text"
+                        android:textStyle="bold"
+                        android:textColor="@color/orange"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="موعد پرداخت :"
+                        android:fontFamily="@font/sh"
+                        android:textSize="@dimen/_11font_mdp"/>
+
+                    <TextView
+                        app:layout_constraintTop_toTopOf="@+id/details_remainingDebtDate_text"
+                        app:layout_constraintBottom_toBottomOf="@+id/details_remainingDebtDate_text"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:id="@+id/details_remainingDebtDate"
+                        android:textDirection="rtl"
+                        android:textColor="@color/black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="01/12/24"
+                        android:fontFamily="@font/sh"
+                        android:textSize="@dimen/_15font_mdp"
+                        android:paddingEnd="110dp"
+                        android:paddingStart="10dp"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <View
+                    android:background="@drawable/separator_shape"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp">
+
+                    <TextView
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:id="@+id/details_moreDetails_text"
+                        android:textStyle="bold"
+                        android:textColor="@color/orange"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="توضیحات بیشتر :"
+                        android:fontFamily="@font/sh"
+                        android:textSize="@dimen/_11font_mdp"/>
+
+                    <TextView
+                        app:layout_constraintTop_toTopOf="@+id/details_moreDetails_text"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:id="@+id/details_moreDetails"
+                        android:textDirection="rtl"
+                        android:textColor="@color/black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="شسبس بثشس بثشس بدثشسثب سثبشسبثشسب سشبس ثبس ثبسیثب شسثب سیثب سیثبس یبث ثبسثبثبسثب "
+                        android:fontFamily="@font/sh"
+                        android:textSize="@dimen/_15font_mdp"
+                        android:paddingEnd="110dp"
+                        android:paddingStart="10dp"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <View
+                    android:background="@drawable/separator_shape"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp">
+
+                    <TextView
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:id="@+id/details_buyDate_text"
+                        android:textStyle="bold"
+                        android:textColor="@color/orange"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="تاریخ ثبت بدهی : "
+                        android:fontFamily="@font/sh"
+                        android:textSize="@dimen/_11font_mdp"/>
+
+                    <TextView
+                        app:layout_constraintTop_toTopOf="@+id/details_buyDate_text"
+                        app:layout_constraintBottom_toBottomOf="@+id/details_buyDate_text"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:id="@+id/details_buyDate"
+                        android:textDirection="rtl"
+                        android:textColor="@color/black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="01/12/24"
+                        android:fontFamily="@font/sh"
+                        android:textSize="@dimen/_15font_mdp"
+                        android:paddingEnd="110dp"
+                        android:paddingStart="10dp"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

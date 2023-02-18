@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/first_activity_frag_navigation"
+    app:startDestination="@id/registerFragment">
+
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.example.debts.ui.register.RegisterFragment"
+        android:label="fragment_register"
+        tools:layout="@layout/fragment_register" >
+        <action
+            android:id="@+id/action_registerFragment_to_enterFragment"
+            app:destination="@id/enterFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/enterFragment"
+        android:name="com.example.debts.ui.enter.EnterFragment"
+        android:label="fragment_enter"
+        tools:layout="@layout/fragment_enter" >
+        <action
+            android:id="@+id/action_enterFragment_to_deviceCheckingFragment"
+            app:destination="@id/deviceCheckingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/deviceCheckingFragment"
+        android:name="com.example.debts.ui.deviceChecking.DeviceCheckingFragment"
+        android:label="fragment_device_checking"
+        tools:layout="@layout/fragment_device_checking" />
+</navigation>

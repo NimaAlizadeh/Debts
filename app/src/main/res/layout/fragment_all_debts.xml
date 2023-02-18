@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color"
+    tools:context=".ui.allDebts.AllDebtsFragment"
+    android:layoutDirection="ltr">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/all_debts_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        android:elevation="5dp"
+        app:navigationIconTint="@color/black"
+        app:title="@string/all"
+        app:titleCentered="true"
+        app:titleTextColor="@color/black"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/toolbar_menu"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/allDebts_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:padding="5dp"
+        app:layout_constraintTop_toBottomOf="@id/all_debts_toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/all_debts_empty_layout"
+        android:alpha="0.3"
+        android:layout_marginTop="@dimen/_10mdp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="بدهی ثبت نشده"
+        android:textColor="@color/black"
+        android:fontFamily="@font/sh"
+        android:textSize="@dimen/_25font_mdp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
