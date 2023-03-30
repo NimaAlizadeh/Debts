@@ -3,27 +3,39 @@ package com.example.debts.ui.neDebts
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
+import com.example.debts.api.ApiService
 import com.example.debts.database.DebtEntity
 import com.example.debts.databinding.FragmentNeDebtsBinding
+import com.example.debts.models.registerBody
 import com.example.debts.ui.activities.MainActivity
 import com.example.debts.utils.Constants
 import com.example.debts.utils.CustomDate
 import com.example.debts.viewmodel.NeDebtsVM
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import ir.hamsaa.persiandatepicker.PersianDatePickerDialog
 import ir.hamsaa.persiandatepicker.api.PersianPickerDate
 import ir.hamsaa.persiandatepicker.api.PersianPickerListener
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import matteocrippa.it.karamba.day
 import matteocrippa.it.karamba.month
 import matteocrippa.it.karamba.today
 import matteocrippa.it.karamba.year
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.*
 import javax.inject.Inject
 
@@ -39,6 +51,9 @@ class NeDebtsFragment : BottomSheetDialogFragment() {
     lateinit var str: String
 
     var timeStamp: Long = 0L
+
+    @Inject
+    lateinit var apiService: ApiService
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentNeDebtsBinding.inflate(layoutInflater, container, false)
@@ -106,14 +121,31 @@ class NeDebtsFragment : BottomSheetDialogFragment() {
                         newDebtEntity.debtRemaining = neDebtsRemainingDebtEdt.text.toString()
                         newDebtEntity.debtRemainingDate = str
                         newDebtEntity.debtRemainingTimeStamp = timeStamp
+                        newDebtEntity.lastModified = Date().today().time
                         val today = Date().today()
                         val cal = CustomDate()
                         cal.gregorianToPersian(today.year(), today.month(), today.day())
                         newDebtEntity.buyDate = cal.year.toString() + "/" + cal.month.toString() + "/" + cal.day.toString()
 
 
+//                        CoroutineScope(Dispatchers.IO).launch {
+//                            val response = apiService.insertDebt("642169069117096f05229569" ,newDebtEntity)
+//                            withContext(Dispatchers.Main){
+//                                if(response.code() != 201){
+//                                    newDebtEntity.isSynced = false
+//                                    Toast.makeText(requireContext(), "بدهی در سرور ثبت نشد" + "\n" + "لطفا بعدا از قسمت همگام سازی با سرور دوباره تلاش کنید", Toast.LENGTH_LONG).show()
+//                                }
+//                                else {
+//                                    newDebtEntity.DBId = response.body().toString()
+//                                    newDebtEntity.isSynced = true
+//                                    viewModel.insertDebt(newDebtEntity)
+//                                }
+//                            }
+//                        }
+
                         viewModel.insertDebt(newDebtEntity)
                         Toast.makeText(requireContext(), "بدهی ثبت شد", Toast.LENGTH_SHORT).show()
+
                         this@NeDebtsFragment.dismiss()
                     }
                     else{
@@ -139,7 +171,7 @@ class NeDebtsFragment : BottomSheetDialogFragment() {
                     neDebtsRemainingDebtEdt.setText(it.debtRemaining)
                     neDebtsRemainingDateEdt.setText(it.debtRemainingDate)
 
-                    editingEntity.debtId = it.debtId
+                    editingEntity.MOId = it.MOId
                     editingEntity.buyDate = it.buyDate
                     editingEntity.debtRemainingTimeStamp = it.debtRemainingTimeStamp
                 }
@@ -155,9 +187,18 @@ class NeDebtsFragment : BottomSheetDialogFragment() {
                         editingEntity.debtRemainingDate = neDebtsRemainingDateEdt.text.toString()
                         if(timeStamp != 0L)
                             editingEntity.debtRemainingTimeStamp = timeStamp
+                        editingEntity.lastModified = Date().today().time
 
                         viewModel.updateDebt(editingEntity)
+//                        viewModel.updateDebtToServer(editingEntity.MOId, editingEntity)
                         Toast.makeText(requireContext(), "بدهی ویرایش شد", Toast.LENGTH_SHORT).show()
+//                        viewModel.updateResponse.observe(viewLifecycleOwner){
+//                            if(it != "updated successfully"){
+//                                val snackBar = Snackbar.make(view,"ثبت این بدهی در سرور با مشکل روبرو شد" + "\n" + "بعدا از طریق همگام سازی با سرور دوباره تلاش کنید", Snackbar.LENGTH_INDEFINITE)
+//                                snackBar.setAction("ok", null)
+//                                snackBar.show()
+//                            }
+//                        }
                         this@NeDebtsFragment.dismiss()
                     }
                     else{

@@ -31,5 +31,6 @@ class TodayDebtsVM @Inject constructor(private val repository: TodayDebtsReposit
 
     fun deleteDebt(deletingDebt: DebtEntity) = viewModelScope.launch {
         repository.deleteDebt(deletingDebt)
+        repository.deleteWholePayment(deletingDebt.MOId)
     }
 }

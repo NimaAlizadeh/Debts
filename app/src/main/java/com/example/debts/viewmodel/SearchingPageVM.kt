@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.debts.database.DebtEntity
+import com.example.debts.database.PaymentDao
 import com.example.debts.repositories.SearchDebtsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -29,7 +30,9 @@ class SearchingPageVM @Inject constructor(private val repository: SearchDebtsRep
         loading.postValue(true)
     }
 
-    fun deleteDebt(deletingDebt: DebtEntity) = viewModelScope.launch {
+    fun deleteDebt(deletingDebt: DebtEntity, text: String) = viewModelScope.launch {
         repository.deleteDebt(deletingDebt)
+        loadSearching(text)
+        repository.deleteWholePayment(deletingDebt.MOId)
     }
 }

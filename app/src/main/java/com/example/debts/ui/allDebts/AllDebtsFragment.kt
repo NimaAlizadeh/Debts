@@ -1,9 +1,9 @@
 package com.example.debts.ui.allDebts
 
 import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +13,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.debts.R
-import com.example.debts.database.DebtsDatabase
+import com.example.debts.api.ApiService
+import com.example.debts.database.DebtEntity
+import com.example.debts.models.entity.SendRefreshModel
 import com.example.debts.databinding.FragmentAllDebtsBinding
 import com.example.debts.repositories.AllDebtsRepository
 import com.example.debts.ui.activities.MainActivity
@@ -22,11 +24,13 @@ import com.example.debts.ui.neDebts.NeDebtsFragment
 import com.example.debts.utils.Constants
 import com.example.debts.viewmodel.AllDebtsVM
 import dagger.hilt.android.AndroidEntryPoint
-import de.raphaelebner.roomdatabasebackup.core.RoomBackup
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class AllDebtsFragment : Fragment() {
+class AllDebtsFragment : Fragment() , MainActivity.OnRefreshClickListener{
     private lateinit var binding: FragmentAllDebtsBinding
 
     private val viewModel: AllDebtsVM by viewModels()
@@ -37,16 +41,16 @@ class AllDebtsFragment : Fragment() {
     @Inject
     lateinit var repository: AllDebtsRepository
 
+    private var sendingDebtsIds = ArrayList<Int>()
+    private var gettingNeededDebtsArray = ArrayList<Int>()
 
-//    @Inject
-//    lateinit var refreshRepository: CheckRepository
-
-//    @Inject
-//    lateinit var a : CheckUpdates
+    @Inject
+    lateinit var apiService: ApiService
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentAllDebtsBinding.inflate(layoutInflater, container, false)
+        (activity as MainActivity).setOnRefreshClickListener(this)
         return binding.root
     }
 
@@ -55,17 +59,6 @@ class AllDebtsFragment : Fragment() {
         MainActivity.appState.postValue(Constants.PAGE_ALL_DEBTS)
 
         binding.apply {
-
-            //checking updates
-//            viewModel.getCheckingList()
-//            viewModel.getCheckListLiveData.observe(viewLifecycleOwner){
-//                viewModel.sendingCheckListLiveData.postValue(it)
-//            }
-//            viewModel.sendingCheckListLiveData.observe(viewLifecycleOwner){
-//
-//            }
-
-
 
             repository.getAllDebts().observe(viewLifecycleOwner){
                 viewModel.allDebtsListLiveData.postValue(it)
@@ -83,14 +76,14 @@ class AllDebtsFragment : Fragment() {
                 when(status){
                     Constants.ON_CLICK_GOTO_DETAIL -> {
                         val direction = AllDebtsFragmentDirections.actionAllDebtsFragmentToDetailsFragment()
-                        MainActivity.whichDebtCode = debtEntity.debtId
+                        MainActivity.whichDebtCode = debtEntity.MOId
                         findNavController().navigate(direction)
                     }
 
                     Constants.ON_CLICK_DELETE -> {
                         val alert = AlertDialog.Builder(requireContext())
-                        alert.setTitle("حذف")
-                            .setMessage("آیا برای حذف این مورد اطمینان دارید؟")
+                        alert.setTitle("حذف بدهی")
+                            .setMessage("آیا برای حذف این بدهی اطمینان دارید؟")
                             .setPositiveButton("بله") { _, _ ->
                                 viewModel.deleteDebt(debtEntity)
                             }
@@ -103,7 +96,7 @@ class AllDebtsFragment : Fragment() {
                     Constants.ON_CLICK_EDIT -> {
                         NeDebtsFragment().show(parentFragmentManager,NeDebtsFragment().tag)
                         MainActivity.neStatus = Constants.ON_CLICK_EDIT
-                        MainActivity.whichDebtCode = debtEntity.debtId
+                        MainActivity.whichDebtCode = debtEntity.MOId
                     }
 
                     Constants.ON_CLICK_SHARE -> {
@@ -134,6 +127,22 @@ class AllDebtsFragment : Fragment() {
             }
 
 
+            val refreshAlert = Dialog(requireContext())
+            refreshAlert.setCancelable(false)
+            refreshAlert.setContentView(R.layout.main_dialog_layout)
+            refreshAlert.create()
+
+            //loading on refresh handling
+            viewModel.loading.observe(viewLifecycleOwner){
+                if(it){
+                    refreshAlert.show()
+                }
+                else{
+                    refreshAlert.dismiss()
+                }
+            }
+
+
             //handling the toolbar menu
             allDebtsToolbar.setOnMenuItemClickListener {
                 when(it.itemId)
@@ -151,4 +160,50 @@ class AllDebtsFragment : Fragment() {
 
         }
     }
+
+    override fun refreshOnClick() {
+        viewModel.loading.postValue(true)
+
+        viewModel.getAllDebtsForServer()
+        var allDebtsList = emptyList<DebtEntity>()
+        viewModel.allDebtsForServer.observe(viewLifecycleOwner){
+            allDebtsList = it
+        }
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = apiService.sync("642169069117096f05229569",allDebtsList)
+            if(response.code() == 200){
+                Toast.makeText(requireContext(), "khoda kheyret bede", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+//        viewModel.getCheckingList()
+//        viewModel.getCheckListLiveData.observe(viewLifecycleOwner){
+//            viewModel.sendCheckingList("642169069117096f05229569" ,it)
+//        }
+//        viewModel.sendingCheckListLiveData.observe(viewLifecycleOwner){
+//            for(item in it){
+//                if(item.lastModified == "mobile")
+//                    sendingDebtsIds.add(item.id)
+//                if(item.lastModified == "db")
+//                    gettingNeededDebtsArray.add(item.id)
+//            }
+//
+//            viewModel.getSendingDebtsToNet(sendingDebtsIds)
+//        }
+//
+//        viewModel.getSendingDebtsToNet.observe(viewLifecycleOwner){
+//            val sendRefreshModel = SendRefreshModel()
+//            sendRefreshModel.toUpdate = it
+//            sendRefreshModel.toFetch = gettingNeededDebtsArray
+//            viewModel.sendNeededDebtsToNet(sendRefreshModel)
+//            sendingDebtsIds.clear()
+//            gettingNeededDebtsArray.clear()
+//        }
+
+
+
+        viewModel.loading.postValue(false)
+    }
+
 }

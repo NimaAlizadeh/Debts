@@ -7,7 +7,8 @@ import com.example.debts.utils.Constants
 @Entity(tableName = Constants.DEBTS_TABLE_NAME)
 data class DebtEntity(
     @PrimaryKey(autoGenerate = true)
-    var debtId:Int = 0,
+    var MOId:Int = 0,
+    var DBId: String = "",
     var fullName: String = "",
     var phoneNumber: String = "",
     var moreDetails: String = "",
@@ -17,5 +18,6 @@ data class DebtEntity(
     var debtRemainingTimeStamp: Long = 0L,
     var buyDate: String = "",
     var goldPrice: String = "",
-    var lastUpdate: Long = 0L
+    var lastModified: Long = 0L,
+    var isDeleted: Boolean = false,
 )

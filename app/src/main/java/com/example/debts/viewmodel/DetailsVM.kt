@@ -23,7 +23,7 @@ class DetailsVM @Inject constructor(private val repository: DetailsRepository) :
         loading.postValue(false)
 
         val response = repository.getSingleDebt(debtCode)
-        if(response.debtId != 0)
+        if(response.MOId != 0)
             detailsLiveData.postValue(response)
 
         loading.postValue(true)
@@ -39,6 +39,10 @@ class DetailsVM @Inject constructor(private val repository: DetailsRepository) :
 
     fun insertPayment(entity: PaymentEntity) = viewModelScope.launch {
         repository.insertPayment(entity)
+    }
+
+    fun deletePayment(entity: PaymentEntity) = viewModelScope.launch {
+        repository.deletePayment(entity)
     }
 
     fun getDebtWithPayments(debtId: Int) = viewModelScope.launch {

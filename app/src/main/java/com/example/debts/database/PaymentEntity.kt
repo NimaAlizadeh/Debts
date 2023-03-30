@@ -10,5 +10,6 @@ data class PaymentEntity (
     var paymentId: Int = 0,
     var debtCreatorId: Int = 0,
     var date: String = "",
-    var amount: String = ""
+    var amount: String = "",
+    var isSynced: Boolean = false
 )

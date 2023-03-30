@@ -2,4 +2,5 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/getBackup_menu" android:title="پشتیبان گیری"/>
     <item android:id="@+id/getRestore_menu" android:title="بازیابی اطلاعات"/>
+    <item android:id="@+id/doRefreshWithNet" android:title="همگام سازی با سرور"/>
 </menu>

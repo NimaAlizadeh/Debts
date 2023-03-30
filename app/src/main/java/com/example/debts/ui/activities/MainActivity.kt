@@ -1,6 +1,7 @@
 package com.example.debts.ui.activities
 
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -14,13 +15,12 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.debts.R
-import com.example.debts.database.DebtEntity
 import com.example.debts.database.DebtsDatabase
 import com.example.debts.databinding.ActivityMainBinding
 import com.example.debts.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import de.raphaelebner.roomdatabasebackup.core.RoomBackup
-import java.util.*
+import java.io.File
 import javax.inject.Inject
 
 
@@ -36,15 +36,22 @@ class MainActivity : AppCompatActivity()
 
     private lateinit var backup: RoomBackup
 
+    private lateinit var file : File
 
-//    private val NOTIFICATION_CHANNEL_ID = "10001"
-//    private val default_notification_channel_id = "default"
-//    val myCalendar: Calendar = Calendar.getInstance()
+    internal lateinit var callback: OnRefreshClickListener
 
     companion object{
         var neStatus: String = ""
         var appState = MutableLiveData<String>()
         var whichDebtCode: Int = 0
+    }
+
+    fun setOnRefreshClickListener(callBack: OnRefreshClickListener){
+        this.callback = callBack
+    }
+
+    interface OnRefreshClickListener {
+        fun refreshOnClick()
     }
 
     override fun onCreate(savedInstanceState: Bundle?)
@@ -85,7 +92,7 @@ class MainActivity : AppCompatActivity()
     private fun initPopUpMenu(view: View)
     {
         popupMenu = PopupMenu(this, view)
-        popupMenu.menuInflater.inflate(R.menu.backup_menu, popupMenu.menu)
+        popupMenu.menuInflater.inflate(R.menu.main_menu_more, popupMenu.menu)
         popupMenu.show()
     }
 
@@ -109,6 +116,7 @@ class MainActivity : AppCompatActivity()
                                 }
                             }
                         }.backup()
+                    Log.d("TAG", "hello")
                     return@setOnMenuItemClickListener true
                 }
 
@@ -132,60 +140,13 @@ class MainActivity : AppCompatActivity()
                     return@setOnMenuItemClickListener true
                 }
 
+                R.id.doRefreshWithNet -> {
+                    callback.refreshOnClick()
+                    return@setOnMenuItemClickListener true
+                }
+
                 else -> return@setOnMenuItemClickListener false
             }
         }
     }
-//
-//    private fun scheduleNotification(notification: Notification, delay: Long) {
-//        val notificationIntent = Intent(this, MyNotificationPublisher::class.java)
-//        notificationIntent.putExtra(MyNotificationPublisher.NOTIFICATION_ID, 1)
-//        notificationIntent.putExtra(MyNotificationPublisher.NOTIFICATION, notification)
-//        val pendingIntent = PendingIntent.getBroadcast(
-//            this,
-//            0,
-//            notificationIntent,
-//            PendingIntent.FLAG_UPDATE_CURRENT
-//        )
-//        val alarmManager = (getSystemService(Context.ALARM_SERVICE) as AlarmManager)
-//        alarmManager[AlarmManager.ELAPSED_REALTIME_WAKEUP, delay] = pendingIntent
-//    }
-//
-//    private fun getNotification(): Notification {
-//        val builder: NotificationCompat.Builder =
-//            NotificationCompat.Builder(this, default_notification_channel_id)
-//        builder.setContentTitle("Scheduled Notification")
-//        builder.setContentText("welcome buddy")
-//        builder.setSmallIcon(R.drawable.ic_launcher_foreground)
-//        builder.setAutoCancel(true)
-//        builder.setChannelId(NOTIFICATION_CHANNEL_ID)
-//        return builder.build()
-//    }
-//
-//    fun setDate() {
-//        val picker = PersianDatePickerDialog(this)
-//            .setInitDate(Date().time)
-//            .setPositiveButtonString("باشه")
-//            .setNegativeButton("بیخیال")
-//            .setTodayButton("امروز")
-//            .setTodayButtonVisible(true)
-//            .setMinYear(PersianDatePickerDialog.THIS_YEAR)
-//            .setTitleType(PersianDatePickerDialog.WEEKDAY_DAY_MONTH_YEAR)
-//            .setShowInBottomSheet(true)
-//            .setActionTextColor(Color.rgb(249,164, 1))
-//            .setListener(object : PersianPickerListener {
-//                override fun onDateSelected(persianPickerDate: PersianPickerDate) {
-//                    val cal = CustomDate()
-//                    cal.persianToGregorian(persianPickerDate.persianYear,persianPickerDate.persianMonth,persianPickerDate.persianDay)
-//                    myCalendar.set(Calendar.YEAR, cal.year)
-//                    myCalendar.set(Calendar.MONTH, cal.month)
-//                    myCalendar.set(Calendar.DAY_OF_MONTH, cal.day)
-//
-//                    scheduleNotification(getNotification(), myCalendar.time.time)
-//                }
-//                override fun onDismissed() {}
-//            })
-//
-//        picker.show()
-//    }
 }

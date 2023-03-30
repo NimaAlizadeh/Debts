@@ -77,14 +77,14 @@ class TodayDebtsFragment : Fragment() {
                 when(status){
                     Constants.ON_CLICK_GOTO_DETAIL -> {
                         val direction = TodayDebtsFragmentDirections.actionTodayDebtsFragmentToDetailsFragment()
-                        MainActivity.whichDebtCode = debtEntity.debtId
+                        MainActivity.whichDebtCode = debtEntity.MOId
                         findNavController().navigate(direction)
                     }
 
                     Constants.ON_CLICK_DELETE -> {
                         val alert = AlertDialog.Builder(requireContext())
-                        alert.setTitle("حذف")
-                            .setMessage("آیا برای حذف این مورد اطمینان دارید؟")
+                        alert.setTitle("حذف بدهی")
+                            .setMessage("آیا برای حذف این بدهی اطمینان دارید؟")
                             .setPositiveButton("بله") { _, _ ->
                                 viewModel.deleteDebt(debtEntity)
                                 viewModel.loadTodayDebts(text)
@@ -98,7 +98,7 @@ class TodayDebtsFragment : Fragment() {
                     Constants.ON_CLICK_EDIT -> {
                         NeDebtsFragment().show(parentFragmentManager, NeDebtsFragment().tag)
                         MainActivity.neStatus = Constants.ON_CLICK_EDIT
-                        MainActivity.whichDebtCode = debtEntity.debtId
+                        MainActivity.whichDebtCode = debtEntity.MOId
                     }
 
                     Constants.ON_CLICK_SHARE -> {

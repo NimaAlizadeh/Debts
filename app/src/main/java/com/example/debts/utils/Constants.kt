@@ -12,7 +12,7 @@ object Constants
     const val ON_CLICK_SHARE = "on_click_share"
     const val DATASTORE_NAME_USER = "user_info"
     const val DATASTORE_TOKEN_USER = "user_key"
-    const val BASE_URL = "https://moviesapi.ir/api/v1/"
+    const val BASE_URL = "https://nima2.axoncodes.com"
     const val CLIENT_TIMEOUT = 60L
     const val PAGE_ALL_DEBTS = "page_all_debts"
     const val PAGE_TODAY_DEBTS = "page_today_debts"

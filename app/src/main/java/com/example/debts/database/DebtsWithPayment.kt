@@ -6,7 +6,7 @@ import androidx.room.Relation
 data class DebtsWithPayment(
         @Embedded val debt: DebtEntity,
         @Relation(
-                parentColumn = "debtId",
+                parentColumn = "MOId",
                 entityColumn = "debtCreatorId"
         )
         var paymentList: List<PaymentEntity>,

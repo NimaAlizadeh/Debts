@@ -35,8 +35,4 @@ object DatabaseModule
     @Singleton
     @Provides
     fun provideNoteEntity(): DebtEntity = DebtEntity()
-
-    @Singleton
-    @Provides
-    fun provideString(): String = String()
 }

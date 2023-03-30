@@ -15,4 +15,10 @@ class AllDebtsRepository @Inject constructor(private val debtDao: DebtDao, priva
     }
 
     suspend fun deleteDebt(deletingDebt: DebtEntity) = debtDao.deleteDebt(deletingDebt)
+
+    suspend fun deleteWholePayment(debtId: Int) = paymentDao.deleteWholePayment(debtId)
+
+    suspend fun getSendingDebtsToNet(wantedIds: List<Int>) = debtDao.getSendingDebtsToNet(wantedIds)
+
+    suspend fun getAllDebtsForServer() = debtDao.getAllDebtsForServer()
 }
