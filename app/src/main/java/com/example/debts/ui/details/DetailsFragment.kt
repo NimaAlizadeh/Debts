@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,6 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import ir.hamsaa.persiandatepicker.PersianDatePickerDialog
 import ir.hamsaa.persiandatepicker.api.PersianPickerDate
 import ir.hamsaa.persiandatepicker.api.PersianPickerListener
+import kotlinx.coroutines.delay
 import matteocrippa.it.karamba.today
 import java.util.*
 import javax.inject.Inject
@@ -62,6 +64,8 @@ class DetailsFragment : Fragment() {
                 findNavController().popBackStack()
             }
 
+            
+
 
             viewModel.loadDetails(MainActivity.whichDebtCode)
             viewModel.detailsLiveData.observe(viewLifecycleOwner){ entity ->
@@ -89,12 +93,10 @@ class DetailsFragment : Fragment() {
             }
 
             viewModel.paymentsLiveData.observe(viewLifecycleOwner){
-                adapter.differ.submitList(it.paymentList)
+                adapter.differ.submitList(it)
                 detailsPaymentRecycler.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
                 detailsPaymentRecycler.adapter = adapter
             }
-
-            Toast.makeText(requireContext(), debtEntity.DBId, Toast.LENGTH_SHORT).show()
 
             detailsPaymentDateEdt.setOnClickListener {
                 val picker = PersianDatePickerDialog(requireContext())
@@ -126,7 +128,8 @@ class DetailsFragment : Fragment() {
                     val remaining = debtEntity.debtRemaining.toLong()
                     val amount = detailsPaymentAmountEdt.text.toString()
                     if((remaining - amount.toLong()) >= 0){
-                        val insertingEntity = PaymentEntity(debtCreatorId = debtEntity.MOId, date = date, amount = amount)
+                        val insertingEntity = PaymentEntity(debtCreatorId = debtEntity.MOId, date = date, amount = amount, debtDBId = debtEntity.DBId, updatedAt = Date().today().time)
+                        Log.d("TAG", "onViewCreated: ")
                         viewModel.insertPayment(insertingEntity)
                         detailsPaymentDateEdt.text?.clear()
                         detailsPaymentAmountEdt.text?.clear()
@@ -135,7 +138,7 @@ class DetailsFragment : Fragment() {
                         detailsRemainingDebt.text = String.format("%,d",doMinus)
                         val updatingDebt = debtEntity
                         updatingDebt.debtRemaining = doMinus.toString()
-                        updatingDebt.lastModified = Date().today().time
+                        updatingDebt.updatedAt = Date().today().time
                         viewModel.updateDebt(updatingDebt)
                         viewModel.getDebtWithPayments(debtEntity.MOId)
                         Toast.makeText(requireContext(), "پرداخت ثبت شد", Toast.LENGTH_SHORT).show()
@@ -158,8 +161,10 @@ class DetailsFragment : Fragment() {
                             val updatingDebt = debtEntity
                             val remain = updatingDebt.debtRemaining.toLong() + paymentEntity.amount.toLong()
                             updatingDebt.debtRemaining = remain.toString()
-                            updatingDebt.lastModified = Date().today().time
+                            updatingDebt.updatedAt = Date().today().time
                             viewModel.updateDebt(updatingDebt)
+                            paymentEntity.isDeleted = true
+                            paymentEntity.updatedAt = Date().today().time
                             viewModel.deletePayment(paymentEntity)
                             detailsRemainingDebt.text = String.format("%,d",remain)
                             viewModel.getDebtWithPayments(debtEntity.MOId)
@@ -179,7 +184,10 @@ class DetailsFragment : Fragment() {
                         alert.setTitle("حذف بدهی")
                             .setMessage("آیا برای حذف این بدهی اطمینان دارید؟")
                             .setPositiveButton("بله") { _, _ ->
-                                viewModel.deleteDebt(debtEntity)
+                                val entity = debtEntity
+                                entity.isDeleted = true
+                                entity.updatedAt = Date().today().time
+                                viewModel.deleteDebt(entity, entity.MOId)
                                 findNavController().popBackStack()
                             }
                             .setNegativeButton("خیر", null)

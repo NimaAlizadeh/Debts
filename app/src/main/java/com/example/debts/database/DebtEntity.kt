@@ -8,16 +8,18 @@ import com.example.debts.utils.Constants
 data class DebtEntity(
     @PrimaryKey(autoGenerate = true)
     var MOId:Int = 0,
+    var old_MOId: Int = 0,
     var DBId: String = "",
     var fullName: String = "",
     var phoneNumber: String = "",
     var moreDetails: String = "",
-    var isSynced: Boolean = false,
     var debtRemaining: String = "",
     var debtRemainingDate: String = "",
     var debtRemainingTimeStamp: Long = 0L,
     var buyDate: String = "",
     var goldPrice: String = "",
-    var lastModified: Long = 0L,
+    var updatedAt: Long = 0L,
+    var createdAt: Long = 0L,
     var isDeleted: Boolean = false,
+    var userId: String = Constants.USER_ID,
 )

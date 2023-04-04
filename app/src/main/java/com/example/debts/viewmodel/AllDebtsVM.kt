@@ -7,6 +7,7 @@ import com.example.debts.models.entity.CheckModel
 import com.example.debts.models.entity.CheckResponse
 import com.example.debts.models.entity.SendRefreshModel
 import com.example.debts.database.DebtEntity
+import com.example.debts.database.PaymentEntity
 import com.example.debts.repositories.AllDebtsRepository
 import com.example.debts.repositories.RefreshRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,40 +18,47 @@ import javax.inject.Inject
 class AllDebtsVM @Inject constructor(private val repository: AllDebtsRepository, private val refreshRepository: RefreshRepository): ViewModel()
 {
     var allDebtsListLiveData = MutableLiveData<MutableList<DebtEntity>>()
-    var loading = MutableLiveData<Boolean>()
     var empty = MutableLiveData<Boolean>()
-    var getCheckListLiveData = MutableLiveData<List<CheckModel>>()
-    var sendingCheckListLiveData = MutableLiveData<List<CheckResponse>>()
-    var getSendingDebtsToNet = MutableLiveData<List<DebtEntity>>()
     var allDebtsForServer = MutableLiveData<List<DebtEntity>>()
+    var allPaymentsForServer = MutableLiveData<List<PaymentEntity>>()
 
 
-    fun deleteDebt(deletingDebt: DebtEntity) = viewModelScope.launch {
-        repository.deleteDebt(deletingDebt)
-        repository.deleteWholePayment(deletingDebt.MOId)
-    }
-
-//    fun getCheckingList() = viewModelScope.launch {
-//        val response = refreshRepository.getCheckingList()
-//        if(response.isNotEmpty())
-//            getCheckListLiveData.postValue(response)
-//    }
-//
-//    fun sendCheckingList(userId: String, body: List<CheckModel>) = viewModelScope.launch {
-//        val response = refreshRepository.sendCheckingListApi(userId, body)
-//        if(response.isSuccessful){
-//            sendingCheckListLiveData.postValue(response.body())
-//        }
-//    }
-
-    fun getSendingDebtsToNet(wantedIds: List<Int>) = viewModelScope.launch {
-        val response = repository.getSendingDebtsToNet(wantedIds)
-        if(response.isNotEmpty())
-            getSendingDebtsToNet.postValue(response)
+    fun deleteDebt(updatingDebt: DebtEntity) = viewModelScope.launch {
+        repository.updateDebt(updatingDebt)
+        repository.deleteWholePayment(updatingDebt.MOId)
     }
 
     fun getAllDebtsForServer() = viewModelScope.launch {
         val response = repository.getAllDebtsForServer()
         allDebtsForServer.postValue(response)
+    }
+
+    fun getAllPaymentsForServer() = viewModelScope.launch {
+        val response = repository.getAllPaymentsForServer()
+        allPaymentsForServer.postValue(response)
+    }
+
+    fun insertMultipleDebts(debtsList: List<DebtEntity>) = viewModelScope.launch {
+        repository.insertMultipleDebts(debtsList)
+    }
+
+    fun updateMultipleDebts(debtsList: List<DebtEntity>) = viewModelScope.launch {
+        repository.updateMultipleDebts(debtsList)
+    }
+
+    fun insertMultiplePayments(paymentsList: List<PaymentEntity>) = viewModelScope.launch {
+        repository.insertMultiplePayments(paymentsList)
+    }
+
+    fun updateMultiplePayments(paymentsList: List<PaymentEntity>) = viewModelScope.launch {
+        repository.updateMultiplePayments(paymentsList)
+    }
+
+    fun deleteDebts() = viewModelScope.launch {
+        repository.deleteDebts()
+    }
+
+    fun deletePayments() = viewModelScope.launch {
+        repository.deletePayments()
     }
 }

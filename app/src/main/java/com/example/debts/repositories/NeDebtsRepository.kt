@@ -11,5 +11,5 @@ class NeDebtsRepository @Inject constructor(private val debtDao: DebtDao, privat
     suspend fun updateDebt(updatingDebt: DebtEntity) = debtDao.updateDebt(updatingDebt)
     suspend fun getSingleDebt(debtCode: Int) : DebtEntity = debtDao.getSingleDebt(debtCode)
 
-    suspend fun insertDebtToServer(userId: String, body: DebtEntity) = apiService.insertDebt(userId, body)
+//    suspend fun insertDebtToServer(userId: String, body: DebtEntity) = apiService.insertDebt(userId, body)
 }

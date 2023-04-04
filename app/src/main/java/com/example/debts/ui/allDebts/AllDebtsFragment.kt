@@ -4,19 +4,24 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.coroutineScope
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.debts.R
 import com.example.debts.api.ApiService
 import com.example.debts.database.DebtEntity
+import com.example.debts.database.PaymentEntity
 import com.example.debts.models.entity.SendRefreshModel
 import com.example.debts.databinding.FragmentAllDebtsBinding
+import com.example.debts.models.PaymentsWithDebts
 import com.example.debts.repositories.AllDebtsRepository
 import com.example.debts.ui.activities.MainActivity
 import com.example.debts.ui.adapters.DebtsAdapter
@@ -24,10 +29,13 @@ import com.example.debts.ui.neDebts.NeDebtsFragment
 import com.example.debts.utils.Constants
 import com.example.debts.viewmodel.AllDebtsVM
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import matteocrippa.it.karamba.today
+import retrofit2.Response
+import java.lang.Exception
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class AllDebtsFragment : Fragment() , MainActivity.OnRefreshClickListener{
@@ -41,11 +49,12 @@ class AllDebtsFragment : Fragment() , MainActivity.OnRefreshClickListener{
     @Inject
     lateinit var repository: AllDebtsRepository
 
-    private var sendingDebtsIds = ArrayList<Int>()
-    private var gettingNeededDebtsArray = ArrayList<Int>()
-
     @Inject
     lateinit var apiService: ApiService
+
+    private var allDebtsList = emptyList<DebtEntity>()
+
+    private lateinit var refreshAlert: Dialog
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -57,8 +66,14 @@ class AllDebtsFragment : Fragment() , MainActivity.OnRefreshClickListener{
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         MainActivity.appState.postValue(Constants.PAGE_ALL_DEBTS)
+        viewModel.getAllPaymentsForServer()
 
         binding.apply {
+            //alert dialog for sync project
+            refreshAlert = Dialog(requireContext())
+            refreshAlert.setCancelable(false)
+            refreshAlert.setContentView(R.layout.main_dialog_layout)
+            refreshAlert.create()
 
             repository.getAllDebts().observe(viewLifecycleOwner){
                 viewModel.allDebtsListLiveData.postValue(it)
@@ -69,6 +84,12 @@ class AllDebtsFragment : Fragment() , MainActivity.OnRefreshClickListener{
                 adapter.setData(it)
                 allDebtsRecycler.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
                 allDebtsRecycler.adapter = adapter
+            }
+
+            viewModel.allDebtsListLiveData.observe(viewLifecycleOwner){
+                allDebtsList = it
+                viewModel.getAllDebtsForServer()
+                viewModel.getAllPaymentsForServer()
             }
 
             //adapter's on click listeners
@@ -85,7 +106,10 @@ class AllDebtsFragment : Fragment() , MainActivity.OnRefreshClickListener{
                         alert.setTitle("حذف بدهی")
                             .setMessage("آیا برای حذف این بدهی اطمینان دارید؟")
                             .setPositiveButton("بله") { _, _ ->
-                                viewModel.deleteDebt(debtEntity)
+                                val entity = debtEntity
+                                entity.isDeleted = true
+                                entity.updatedAt = Date().today().time
+                                viewModel.deleteDebt(entity)
                             }
                             .setNegativeButton("خیر", null)
                             .setCancelable(false)
@@ -127,22 +151,6 @@ class AllDebtsFragment : Fragment() , MainActivity.OnRefreshClickListener{
             }
 
 
-            val refreshAlert = Dialog(requireContext())
-            refreshAlert.setCancelable(false)
-            refreshAlert.setContentView(R.layout.main_dialog_layout)
-            refreshAlert.create()
-
-            //loading on refresh handling
-            viewModel.loading.observe(viewLifecycleOwner){
-                if(it){
-                    refreshAlert.show()
-                }
-                else{
-                    refreshAlert.dismiss()
-                }
-            }
-
-
             //handling the toolbar menu
             allDebtsToolbar.setOnMenuItemClickListener {
                 when(it.itemId)
@@ -162,48 +170,56 @@ class AllDebtsFragment : Fragment() , MainActivity.OnRefreshClickListener{
     }
 
     override fun refreshOnClick() {
-        viewModel.loading.postValue(true)
+        refreshAlert.show()
+        var responseOk: Boolean
+        val paymentsWithDebts = PaymentsWithDebts()
+        var debtsResponse: Response<List<DebtEntity>>? = null
+        var paymentsResponse: Response<List<PaymentEntity>>? = null
 
-        viewModel.getAllDebtsForServer()
-        var allDebtsList = emptyList<DebtEntity>()
-        viewModel.allDebtsForServer.observe(viewLifecycleOwner){
-            allDebtsList = it
-        }
+        lifecycle.coroutineScope.launchWhenCreated {
+            try {
+                if(viewModel.allDebtsForServer.value != null){
+                    val response = apiService.syncDebts(Constants.USER_ID ,viewModel.allDebtsForServer.value!!)
+                    Log.d("mashti", "payments = " + response.errorBody())
+                    if(response.isSuccessful && response.code() == 200){
+                        Log.d("mashti", "got into debts")
+                        debtsResponse = response
+                        paymentsWithDebts.debts = response.body()!!
+                    }
+                }
+                if(viewModel.allPaymentsForServer.value != null){
+                    paymentsWithDebts.payments = viewModel.allPaymentsForServer.value!!
+                    val response1 = apiService.syncPayments(Constants.USER_ID, paymentsWithDebts)
+                    Log.d("mashti", "payments = " + response1.errorBody())
+                    if(response1.isSuccessful && response1.code() == 200){
+                        Log.d("mashti", "got into debts")
+                        paymentsResponse = response1
+                    }
+                }
 
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = apiService.sync("642169069117096f05229569",allDebtsList)
-            if(response.code() == 200){
-                Toast.makeText(requireContext(), "khoda kheyret bede", Toast.LENGTH_SHORT).show()
+                responseOk = if(debtsResponse != null && paymentsResponse != null){
+                    viewModel.deleteDebts()
+                    delay(2000)
+                    viewModel.insertMultipleDebts(debtsResponse!!.body()!!)
+                    viewModel.deletePayments()
+                    delay(2000)
+                    viewModel.insertMultiplePayments(paymentsResponse!!.body()!!)
+                    true
+                }else{ false }
+
+                withContext(Dispatchers.Main){
+                    refreshAlert.dismiss()
+                    if(responseOk)
+                        Toast.makeText(requireContext(), "همگام سازی با موفقیت انجام شد", Toast.LENGTH_SHORT).show()
+                    else
+                        Toast.makeText(requireContext(), "همگام سازی به مشکل خورد", Toast.LENGTH_SHORT).show()
+                }
+            }catch (e: Exception){
+                withContext(Dispatchers.Main){
+                    refreshAlert.dismiss()
+                    Toast.makeText(requireContext(), "برنامه در برقراری با اینترنت به مشکل خورد", Toast.LENGTH_LONG).show()
+                }
             }
         }
-
-//        viewModel.getCheckingList()
-//        viewModel.getCheckListLiveData.observe(viewLifecycleOwner){
-//            viewModel.sendCheckingList("642169069117096f05229569" ,it)
-//        }
-//        viewModel.sendingCheckListLiveData.observe(viewLifecycleOwner){
-//            for(item in it){
-//                if(item.lastModified == "mobile")
-//                    sendingDebtsIds.add(item.id)
-//                if(item.lastModified == "db")
-//                    gettingNeededDebtsArray.add(item.id)
-//            }
-//
-//            viewModel.getSendingDebtsToNet(sendingDebtsIds)
-//        }
-//
-//        viewModel.getSendingDebtsToNet.observe(viewLifecycleOwner){
-//            val sendRefreshModel = SendRefreshModel()
-//            sendRefreshModel.toUpdate = it
-//            sendRefreshModel.toFetch = gettingNeededDebtsArray
-//            viewModel.sendNeededDebtsToNet(sendRefreshModel)
-//            sendingDebtsIds.clear()
-//            gettingNeededDebtsArray.clear()
-//        }
-
-
-
-        viewModel.loading.postValue(false)
     }
-
 }

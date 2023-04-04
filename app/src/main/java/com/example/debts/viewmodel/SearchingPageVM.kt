@@ -30,9 +30,9 @@ class SearchingPageVM @Inject constructor(private val repository: SearchDebtsRep
         loading.postValue(true)
     }
 
-    fun deleteDebt(deletingDebt: DebtEntity, text: String) = viewModelScope.launch {
-        repository.deleteDebt(deletingDebt)
+    fun deleteDebt(updatingDebt: DebtEntity, text: String) = viewModelScope.launch {
+        repository.updateDebt(updatingDebt)
         loadSearching(text)
-        repository.deleteWholePayment(deletingDebt.MOId)
+        repository.deleteWholePayment(updatingDebt.MOId)
     }
 }

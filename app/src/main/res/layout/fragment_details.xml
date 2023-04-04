@@ -308,6 +308,48 @@
                     <TextView
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
+                        android:id="@+id/details_buyDate_text"
+                        android:textStyle="bold"
+                        android:textColor="@color/orange"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="تاریخ ثبت بدهی : "
+                        android:fontFamily="@font/sh"
+                        android:textSize="@dimen/_11font_mdp"/>
+
+                    <TextView
+                        app:layout_constraintTop_toTopOf="@+id/details_buyDate_text"
+                        app:layout_constraintBottom_toBottomOf="@+id/details_buyDate_text"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:id="@+id/details_buyDate"
+                        android:textDirection="rtl"
+                        android:textColor="@color/black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="01/12/24"
+                        android:fontFamily="@font/sh"
+                        android:textSize="@dimen/_15font_mdp"
+                        android:paddingEnd="110dp"
+                        android:paddingStart="10dp"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <View
+                    android:background="@drawable/separator_shape"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp">
+
+                    <TextView
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
                         android:id="@+id/details_remainingDebtDate_text"
                         android:textStyle="bold"
                         android:textColor="@color/orange"
@@ -337,6 +379,8 @@
                     android:background="@drawable/separator_shape"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"/>
+
+
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:orientation="vertical"
@@ -371,49 +415,8 @@
                         android:fontFamily="@font/sh"
                         android:textSize="@dimen/_15font_mdp"
                         android:paddingEnd="110dp"
-                        android:paddingStart="10dp"/>
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <View
-                    android:background="@drawable/separator_shape"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"/>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="20dp">
-
-                    <TextView
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:id="@+id/details_buyDate_text"
-                        android:textStyle="bold"
-                        android:textColor="@color/orange"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="تاریخ ثبت بدهی : "
-                        android:fontFamily="@font/sh"
-                        android:textSize="@dimen/_11font_mdp"/>
-
-                    <TextView
-                        app:layout_constraintTop_toTopOf="@+id/details_buyDate_text"
-                        app:layout_constraintBottom_toBottomOf="@+id/details_buyDate_text"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:id="@+id/details_buyDate"
-                        android:textDirection="rtl"
-                        android:textColor="@color/black"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="01/12/24"
-                        android:fontFamily="@font/sh"
-                        android:textSize="@dimen/_15font_mdp"
-                        android:paddingEnd="110dp"
-                        android:paddingStart="10dp"/>
+                        android:paddingStart="10dp"
+                        app:layout_constraintBottom_toBottomOf="@id/details_moreDetails_text"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </LinearLayout>

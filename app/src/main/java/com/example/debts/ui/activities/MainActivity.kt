@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.debts.R
@@ -38,12 +39,13 @@ class MainActivity : AppCompatActivity()
 
     private lateinit var file : File
 
-    internal lateinit var callback: OnRefreshClickListener
+    private lateinit var callback: OnRefreshClickListener
 
     companion object{
         var neStatus: String = ""
         var appState = MutableLiveData<String>()
         var whichDebtCode: Int = 0
+        var reload = MutableLiveData<String>()
     }
 
     fun setOnRefreshClickListener(callBack: OnRefreshClickListener){
@@ -59,13 +61,20 @@ class MainActivity : AppCompatActivity()
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         appState.postValue(Constants.PAGE_ALL_DEBTS)
 
         backup = RoomBackup(this)
 
         binding.apply {
             navController = findNavController(R.id.main_navigation_host)
+            navController.addOnDestinationChangedListener { _, nd: NavDestination, _ ->
+                if (nd.id == R.id.searchFragment || nd.id == R.id.allDebtsFragment || nd.id == R.id.todayDebtsFragment) {
+                    mainBottomNavigation.visibility = View.VISIBLE
+                } else {
+                    mainBottomNavigation.visibility = View.GONE
+                }
+            }
             mainBottomNavigation.setupWithNavController(navController)
 
 

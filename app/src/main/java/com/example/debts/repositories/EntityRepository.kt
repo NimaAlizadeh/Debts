@@ -7,5 +7,5 @@ import com.example.debts.models.registerBody
 import javax.inject.Inject
 
 class EntityRepository @Inject constructor(private val apiService: ApiService){
-    suspend fun updateDebt(id: Int, body: DebtEntity) = apiService.updateDebt(id, body)
+//    suspend fun updateDebt(id: Int, body: DebtEntity) = apiService.updateDebt(id, body)
 }

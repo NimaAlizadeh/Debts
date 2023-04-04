@@ -59,6 +59,10 @@ class TodayDebtsFragment : Fragment() {
             today = cal.year.toString() + "/" + cal.month.toString() + "/" + cal.day.toString()
             viewModel.loadTodayDebts(today)
 
+            MainActivity.reload.observe(viewLifecycleOwner){
+                if(it == Constants.PAGE_TODAY_DEBTS)
+                    viewModel.loadTodayDebts(today)
+            }
 
             viewModel.empty.observe(viewLifecycleOwner){
                 if(it)
@@ -86,8 +90,10 @@ class TodayDebtsFragment : Fragment() {
                         alert.setTitle("حذف بدهی")
                             .setMessage("آیا برای حذف این بدهی اطمینان دارید؟")
                             .setPositiveButton("بله") { _, _ ->
-                                viewModel.deleteDebt(debtEntity)
-                                viewModel.loadTodayDebts(text)
+                                val entity = debtEntity
+                                entity.isDeleted = true
+                                entity.updatedAt = Date().today().time
+                                viewModel.deleteDebt(entity)
                             }
                             .setNegativeButton("خیر", null)
                             .setCancelable(false)

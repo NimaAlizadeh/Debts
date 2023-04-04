@@ -17,7 +17,7 @@ class DetailsVM @Inject constructor(private val repository: DetailsRepository) :
 
     var loading = MutableLiveData<Boolean>()
     var detailsLiveData = MutableLiveData<DebtEntity>()
-    var paymentsLiveData = MutableLiveData<DebtsWithPayment>()
+    var paymentsLiveData = MutableLiveData<List<PaymentEntity>>()
 
     fun loadDetails(debtCode: Int) = viewModelScope.launch {
         loading.postValue(false)
@@ -29,8 +29,9 @@ class DetailsVM @Inject constructor(private val repository: DetailsRepository) :
         loading.postValue(true)
     }
 
-    fun deleteDebt(deletingDebt: DebtEntity) = viewModelScope.launch {
-        repository.deleteDebt(deletingDebt)
+    fun deleteDebt(updatingDebt: DebtEntity, debtId: Int) = viewModelScope.launch {
+        repository.deleteDebt(updatingDebt)
+        repository.deleteWholePayment(debtId)
     }
 
     fun updateDebt(updatingDebt: DebtEntity) = viewModelScope.launch {
@@ -42,11 +43,16 @@ class DetailsVM @Inject constructor(private val repository: DetailsRepository) :
     }
 
     fun deletePayment(entity: PaymentEntity) = viewModelScope.launch {
-        repository.deletePayment(entity)
+        repository.updatePayment(entity)
     }
 
     fun getDebtWithPayments(debtId: Int) = viewModelScope.launch {
         val response = repository.getDebtWithPayments(debtId)
-            paymentsLiveData.postValue(response)
+        val tempList = ArrayList<PaymentEntity>()
+        for(item in response.paymentList){
+            if(!item.isDeleted)
+                tempList.add(item)
+        }
+        paymentsLiveData.postValue(tempList)
     }
 }

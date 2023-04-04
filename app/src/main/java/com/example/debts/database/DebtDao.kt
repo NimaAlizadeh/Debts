@@ -11,8 +11,11 @@ interface DebtDao
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDebt(newDebt: DebtEntity)
 
-    @Delete
-    suspend fun deleteDebt(deletingDebt: DebtEntity)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertMultipleDebts(debtsList: List<DebtEntity>)
+
+    @Update
+    suspend fun updateMultipleDebts(debtsList: List<DebtEntity>)
 
     @Update
     suspend fun updateDebt(updatingDebt: DebtEntity)
@@ -36,4 +39,8 @@ interface DebtDao
 
     @Query(""+"SELECT * FROM ${Constants.DEBTS_TABLE_NAME} WHERE MOId IN (:wantedIds)")
     suspend fun getSendingDebtsToNet(wantedIds: List<Int>): MutableList<DebtEntity>
+
+    @Query(""+"DELETE FROM ${Constants.DEBTS_TABLE_NAME}")
+    suspend fun deleteDebts()
+
 }

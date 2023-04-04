@@ -39,16 +39,19 @@ class NeDebtsVM @Inject constructor(private val repository: NeDebtsRepository): 
         response.postValue(repository.getSingleDebt(debtCode))
     }
 
-    fun insertDebtToServer(userId: String, body: DebtEntity) = viewModelScope.launch {
-        Log.d("mashti", "got into method")
-        val response = repository.insertDebtToServer(userId ,body)
-        Log.d("mashti", "after request")
-        if(response.isSuccessful){
-            Log.d("mashti", "is successful")
-            insertResponse.postValue(response.code())
-        }
-    }
+//    fun insertDebtToServer(userId: String, body: DebtEntity) = viewModelScope.launch {
+//        Log.d("mashti", "got into method")
+//        val response = repository.insertDebtToServer(userId ,body)
+//        Log.d("mashti", "after request")
+//        if(response.isSuccessful){
+//            Log.d("mashti", "is successful")
+//            insertResponse.postValue(response.code())
+//        }
+//    }
 
-    fun updateDebtToServer(id: Int, body: DebtEntity) = viewModelScope.launch {
-    }
+//    fun updateDebtToServer(id: Int, body: DebtEntity) = viewModelScope.launch {
+//    }
 }
+
+// 1680273688435
+// 1680273716803 update shod bishtar shod

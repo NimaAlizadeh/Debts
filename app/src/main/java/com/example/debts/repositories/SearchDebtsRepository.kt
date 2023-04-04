@@ -7,6 +7,6 @@ import javax.inject.Inject
 
 class SearchDebtsRepository @Inject constructor(private val debtDao: DebtDao, private val paymentDao: PaymentDao) {
     fun getSearchedDebts(fullName: String) = debtDao.getSearchedDebts(fullName)
-    suspend fun deleteDebt(deletingDebt: DebtEntity) = debtDao.deleteDebt(deletingDebt)
+    suspend fun updateDebt(updatingDebt: DebtEntity) = debtDao.updateDebt(updatingDebt)
     suspend fun deleteWholePayment(debtId: Int) = paymentDao.deleteWholePayment(debtId)
 }

@@ -10,12 +10,11 @@ import javax.inject.Inject
 class DetailsRepository @Inject constructor(private val debtDao: DebtDao, private val paymentDao: PaymentDao, private val apiService: ApiService)
 {
     suspend fun getSingleDebt(debtCode: Int) = debtDao.getSingleDebt(debtCode)
-    suspend fun deleteDebt(deletingDebt: DebtEntity) = debtDao.deleteDebt(deletingDebt)
+    suspend fun deleteDebt(updatingDebt: DebtEntity) = debtDao.updateDebt(updatingDebt)
     suspend fun updateDebt(updatingDebt: DebtEntity) = debtDao.updateDebt(updatingDebt)
 
     suspend fun insertPayment(entity: PaymentEntity) = paymentDao.insertPayment(entity)
-    suspend fun deletePayment(entity: PaymentEntity) = paymentDao.deletePayment(entity)
+    suspend fun updatePayment(entity: PaymentEntity) = paymentDao.updatePayment(entity)
     suspend fun getDebtWithPayments(debtId: Int) = paymentDao.getDebtWithPayments(debtId)
-
-    suspend fun newPaymentServer(paymentId: Int, body: PaymentEntity) = apiService.newPayment(paymentId, body)
+    suspend fun deleteWholePayment(debtId: Int) = paymentDao.deleteWholePayment(debtId)
 }

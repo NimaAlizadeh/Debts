@@ -11,7 +11,7 @@ class TodayDebtsRepository @Inject constructor(private val debtDao: DebtDao, pri
         return debtDao.getTodayDebts(date)
     }
 
-    suspend fun deleteDebt(deletingDebt: DebtEntity) = debtDao.deleteDebt(deletingDebt)
+    suspend fun deleteDebt(updatingDebt: DebtEntity) = debtDao.updateDebt(updatingDebt)
 
     suspend fun deleteWholePayment(debtId: Int) = paymentDao.deleteWholePayment(debtId)
 }

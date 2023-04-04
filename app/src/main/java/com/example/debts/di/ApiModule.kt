@@ -22,9 +22,6 @@ object ApiModule
     @Singleton
     fun provideBaseUrl(): String = Constants.BASE_URL
 
-//    @Provides
-//    @Singleton
-//    fun provideSendRefreshModel(): SendRefreshModel = SendRefreshModel()
 
     @Provides
     @Singleton

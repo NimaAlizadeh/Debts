@@ -114,34 +114,22 @@ class NeDebtsFragment : BottomSheetDialogFragment() {
                     if(neDebtsFullNameEdt.text.toString().isNotEmpty() && neDebtsRemainingDebtEdt.text.toString().isNotEmpty() &&
                         neDebtsGoldPriceEdt.text.toString().isNotEmpty() && neDebtsRemainingDateEdt.text.toString().isNotEmpty()){
                         //filling the information from user
+                        newDebtEntity.old_MOId = 0
                         newDebtEntity.fullName = neDebtsFullNameEdt.text.toString()
                         newDebtEntity.phoneNumber = neDebtsPhoneNumberEdt.text.toString()
                         newDebtEntity.goldPrice = neDebtsGoldPriceEdt.text.toString()
                         newDebtEntity.moreDetails = neDebtsMoreDetailsEdt.text.toString()
                         newDebtEntity.debtRemaining = neDebtsRemainingDebtEdt.text.toString()
                         newDebtEntity.debtRemainingDate = str
+                        newDebtEntity.userId = Constants.USER_ID
                         newDebtEntity.debtRemainingTimeStamp = timeStamp
-                        newDebtEntity.lastModified = Date().today().time
                         val today = Date().today()
+                        newDebtEntity.updatedAt = today.time
+                        newDebtEntity.createdAt = today.time
                         val cal = CustomDate()
                         cal.gregorianToPersian(today.year(), today.month(), today.day())
                         newDebtEntity.buyDate = cal.year.toString() + "/" + cal.month.toString() + "/" + cal.day.toString()
 
-
-//                        CoroutineScope(Dispatchers.IO).launch {
-//                            val response = apiService.insertDebt("642169069117096f05229569" ,newDebtEntity)
-//                            withContext(Dispatchers.Main){
-//                                if(response.code() != 201){
-//                                    newDebtEntity.isSynced = false
-//                                    Toast.makeText(requireContext(), "بدهی در سرور ثبت نشد" + "\n" + "لطفا بعدا از قسمت همگام سازی با سرور دوباره تلاش کنید", Toast.LENGTH_LONG).show()
-//                                }
-//                                else {
-//                                    newDebtEntity.DBId = response.body().toString()
-//                                    newDebtEntity.isSynced = true
-//                                    viewModel.insertDebt(newDebtEntity)
-//                                }
-//                            }
-//                        }
 
                         viewModel.insertDebt(newDebtEntity)
                         Toast.makeText(requireContext(), "بدهی ثبت شد", Toast.LENGTH_SHORT).show()
@@ -174,6 +162,10 @@ class NeDebtsFragment : BottomSheetDialogFragment() {
                     editingEntity.MOId = it.MOId
                     editingEntity.buyDate = it.buyDate
                     editingEntity.debtRemainingTimeStamp = it.debtRemainingTimeStamp
+                    editingEntity.createdAt = it.createdAt
+                    editingEntity.DBId = it.DBId
+                    editingEntity.isDeleted = it.isDeleted
+                    editingEntity.old_MOId = it.old_MOId
                 }
 
                 neDebtsButton.setOnClickListener {
@@ -187,18 +179,16 @@ class NeDebtsFragment : BottomSheetDialogFragment() {
                         editingEntity.debtRemainingDate = neDebtsRemainingDateEdt.text.toString()
                         if(timeStamp != 0L)
                             editingEntity.debtRemainingTimeStamp = timeStamp
-                        editingEntity.lastModified = Date().today().time
+                        editingEntity.updatedAt = Date().today().time
+                        editingEntity.userId = Constants.USER_ID
 
                         viewModel.updateDebt(editingEntity)
-//                        viewModel.updateDebtToServer(editingEntity.MOId, editingEntity)
+
                         Toast.makeText(requireContext(), "بدهی ویرایش شد", Toast.LENGTH_SHORT).show()
-//                        viewModel.updateResponse.observe(viewLifecycleOwner){
-//                            if(it != "updated successfully"){
-//                                val snackBar = Snackbar.make(view,"ثبت این بدهی در سرور با مشکل روبرو شد" + "\n" + "بعدا از طریق همگام سازی با سرور دوباره تلاش کنید", Snackbar.LENGTH_INDEFINITE)
-//                                snackBar.setAction("ok", null)
-//                                snackBar.show()
-//                            }
-//                        }
+                        if(MainActivity.appState.value == Constants.PAGE_SEARCH)
+                            MainActivity.reload.postValue(Constants.PAGE_SEARCH)
+                        else if(MainActivity.appState.value == Constants.PAGE_TODAY_DEBTS)
+                            MainActivity.reload.postValue(Constants.PAGE_TODAY_DEBTS)
                         this@NeDebtsFragment.dismiss()
                     }
                     else{

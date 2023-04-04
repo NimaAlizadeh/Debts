@@ -18,5 +18,5 @@ object Constants
     const val PAGE_TODAY_DEBTS = "page_today_debts"
     const val PAGE_SEARCH = "page_search"
     const val PAGE_DETAILS = "page_details"
-
+    var USER_ID = ""
 }
